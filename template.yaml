@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  MyApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Dev
+      Auth:
+        DefaultAuthorizer: MyLambdaTokenAuthorizer
+        Authorizers:
+          MyLambdaTokenAuthorizer:
+            FunctionArn: !GetAtt MyAuthFunction.Arn
+
+  MyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src
+      Handler: handler.hello
+      Runtime: nodejs18.x
+      Events:
+        GetRoot:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /
+            Method: get
+
+  MyAuthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src
+      Handler: authorizer.auth
+      Runtime: nodejs18.x
+
+
+# Output API Gateway URL and use localhost.localstack.cloud instead of amazonaws.com
+Outputs:
+  APIGWEndpoint:
+    Description: "API Prod stage endpoint"
+    Value: !Sub "https://${MyApi}.execute-api.${AWS::Region}.localhost.localstack.cloud/Dev/"
