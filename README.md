@@ -1,6 +1,8 @@
 # AWS Serverless Application Model (SAM) with LocalStack Lambda and Authorizer
 Demonstrates how to use AWS SAM with LocalStack to create a Lambda function and an API Gateway with an authorizer.
 
+![Architecture](./docs/img/design.drawio.png "Architecture")
+
 ## Prerequisites
 
 * LocalStack
