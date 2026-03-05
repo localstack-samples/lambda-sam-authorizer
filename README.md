@@ -17,15 +17,17 @@ Demonstrates how to use AWS SAM with LocalStack to create a Lambda function and 
 
 Setup [Serverless Application Model (SAM)](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html) and [AWS SAM CLI Local](https://github.com/localstack/aws-sam-cli-local) on your local machine. We also recommend using NodeJS 14.x alongside a [Node Version Manager](https://github.com/nvm-sh/nvm) to manage your NodeJS versions.
 
-Create a file named `.env-local` and put your LocalStack Auth Token in it. It is ignored by gitignore.
+Start LocalStack Pro with the `LOCALSTACK_AUTH_TOKEN` pre-configured:
+
 ```shell
-export LOCALSTACK_AUTH_TOKEN=<your-token>>
+export LOCALSTACK_AUTH_TOKEN=<your-auth-token>
+make start
+make ready
 ```
 
-Start LocalStack via:
-
-```sh 
-localstack start -d
+Optionally, create a file named `.env-local` to persist your token (it is ignored by gitignore):
+```shell
+export LOCALSTACK_AUTH_TOKEN=<your-auth-token>
 ```
 
 ## Deploy the application
