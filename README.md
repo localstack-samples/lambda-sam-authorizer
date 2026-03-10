@@ -5,14 +5,14 @@ Demonstrates how to use AWS SAM with LocalStack to create a Lambda function and 
 
 ## Prerequisites
 
-* LocalStack with the [`localstack` CLI](https://docs.localstack.cloud/getting-started/installation/#localstack-cli).
+* A valid [LocalStack for AWS license](https://localstack.cloud/pricing). Your license provides a [`LOCALSTACK_AUTH_TOKEN`](https://docs.localstack.cloud/getting-started/auth-token/) to activate LocalStack.
+* [`localstack` CLI](https://docs.localstack.cloud/getting-started/installation/#localstack-cli).
 * Docker
 * `make`
 * [`awslocal`](https://github.com/localstack/awscli-local)
 * [`samlocal`](https://github.com/localstack/aws-sam-cli-local)
 * NodeJS 18.x
 * [`ulid`](https://www.npmjs.com/package/ulid)
-* A valid [LocalStack for AWS license](https://localstack.cloud/pricing). Your license provides a [`LOCALSTACK_AUTH_TOKEN`](https://docs.localstack.cloud/getting-started/auth-token/) to activate LocalStack.
 
 ## Installing
 
