@@ -1,1 +1,1 @@
-aws-sam-cli-local
+aws-sam-cli
