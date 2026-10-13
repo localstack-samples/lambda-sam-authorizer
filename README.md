@@ -44,7 +44,7 @@ To setup the infrastructure on LocalStack, run:
 make deploy
 ```
 
-You will be prompted to enter a name for the stack. Use the default options for the prompts and fill `Y` (`Yes`) for the confirmation prompt. The stack will be created and the output will be printed to the console.
+This deploys the stack `sam-app` without prompting. Set `STACK_NAME` to use another name, for example `make deploy STACK_NAME=my-stack`. The stack outputs are printed to the console.
 
 
 After deploying, you can invoke the Lambda function using the following commands:
@@ -53,4 +53,10 @@ make invoke-allow
 make invoke-deny
 make invoke-unauthorized
 make invoke-none
+```
+
+To check all four cases at once, run:
+
+```sh
+make test
 ```
