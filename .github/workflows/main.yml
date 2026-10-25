@@ -38,10 +38,17 @@ jobs:
       - name: Install dependencies
         run: make install
 
-      - name: Start LocalStack
+      # >>> localstack-platform: start (project "lambda-sam-authorizer", proj_b1e4056f)
+      - name: Start LocalStack in a platform sandbox
+        id: localstack-platform
         env:
-          LOCALSTACK_AUTH_TOKEN: ${{ secrets.LOCALSTACK_AUTH_TOKEN }}
-        run: lstk start
+          LOCALSTACK_AUTH_TOKEN: ${{ secrets.LOCALSTACK_PLATFORM_AUTH_TOKEN }}
+          LSTK_PROJECT_REVIEW_LEG: ${{ strategy.job-index == 0 }}
+        run: |
+          pipx install --force "https://localstack-artifacts-internal.s3.eu-central-1.amazonaws.com/packages/lstk-project/lstk_project-0.1.1-py3-none-any.whl" > /dev/null
+          npm install -g @localstack/lstk > /dev/null
+          lstk-project start "lambda-sam-authorizer"
+      # <<< localstack-platform: start
 
       - name: Deploy the SAM application
         run: make deploy
@@ -51,4 +58,15 @@ jobs:
 
       - name: Show LocalStack logs
         if: failure()
-        run: lstk logs | tail -200
+        run: lstk-project logs "lambda-sam-authorizer" | tail -200  # localstack-platform (was: lstk logs)
+        env:
+          LOCALSTACK_AUTH_TOKEN: ${{ secrets.LOCALSTACK_PLATFORM_AUTH_TOKEN }}  # localstack-platform
+      # >>> localstack-platform: shutdown (project "lambda-sam-authorizer", proj_b1e4056f)
+      - name: Report to LocalStack and release the sandbox
+        if: always()
+        continue-on-error: true
+        env:
+          LOCALSTACK_AUTH_TOKEN: ${{ secrets.LOCALSTACK_PLATFORM_AUTH_TOKEN }}
+          LSTK_PROJECT_REVIEW_LEG: ${{ strategy.job-index == 0 }}
+        run: lstk-project shutdown "lambda-sam-authorizer" --status ${{ job.status }}
+      # <<< localstack-platform: shutdown
