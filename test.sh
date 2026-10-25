@@ -25,7 +25,7 @@ expect() {
   fi
 }
 
-expect "token 'allow'" 200 "hello world" -H "Authorization: allow"
+expect "token 'allow'" 201 "hello world" -H "Authorization: allow"
 expect "token 'deny'" 403 "explicit deny" -H "Authorization: deny"
 expect "token 'unauthorized'" 401 "Unauthorized" -H "Authorization: unauthorized"
 expect "any other token" 500 "" -H "Authorization: none"
