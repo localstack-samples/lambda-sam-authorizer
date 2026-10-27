@@ -12,9 +12,16 @@ echo "API: $URL"
 failed=0
 # expect <description> <status> <body substring> [curl args...]
 expect() {
-  local description=$1 status=$2 substring=$3 response actual
+  local description=$1 status=$2 substring=$3 target_url=$URL response actual
   shift 3
-  response=$(curl -sk -m 30 -w '\n%{http_code}' "$URL" "$@")
+  if [[ "${1:-}" == http* ]]; then
+    target_url=$1
+    shift
+  elif [[ "${1:-}" == /* ]]; then
+    target_url="${URL%/}$1"
+    shift
+  fi
+  response=$(curl -sk -m 30 -w '\n%{http_code}' "$target_url" "$@")
   actual=${response##*$'\n'}
   response=${response%$'\n'*}
   if [ "$actual" = "$status" ] && [[ "$response" == *"$substring"* ]]; then
@@ -30,6 +37,7 @@ expect "token 'deny'" 403 "explicit deny" -H "Authorization: deny"
 expect "token 'unauthorized'" 401 "Unauthorized" -H "Authorization: unauthorized"
 expect "any other token" 500 "" -H "Authorization: none"
 expect "no token" 401 "Unauthorized"
+expect "whoami token 'allow'" 200 "user" "${URL}whoami" -H "Authorization: allow"
 
 if [ "$failed" != 0 ]; then
   echo "Test failed"

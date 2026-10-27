@@ -10,21 +10,21 @@ module.exports.auth = (event, context, callback) => {
     var token = event.authorizationToken;
     switch (token) {
         case 'allow':
-            callback(null, generatePolicy('user', 'Allow', event.methodArn));
+            callback(null, generatePolicy('user', 'Allow', event.methodArn, token));
             break;
         case 'deny':
-            callback(null, generatePolicy('user', 'Deny', event.methodArn));
+            callback(null, generatePolicy('user', 'Deny', event.methodArn, token));
             break;
         case 'unauthorized':
-            callback("Unauthorized", generatePolicy('user', 'Deny', event.methodArn));   // Return a 401 Unauthorized response
+            callback("Unauthorized", generatePolicy('user', 'Deny', event.methodArn, token));   // Return a 401 Unauthorized response
             break;
         default:
-            callback("Error: Invalid token",  generatePolicy('user', 'Deny', event.methodArn)); // Return a 500 Invalid token response
+            callback("Error: Invalid token",  generatePolicy('user', 'Deny', event.methodArn, token)); // Return a 500 Invalid token response
     }
 };
 
 // Help function to generate an IAM policy
-var generatePolicy = function(principalId, effect, resource) {
+var generatePolicy = function(principalId, effect, resource, token) {
     var authResponse = {};
 
     authResponse.principalId = principalId;
@@ -44,7 +44,8 @@ var generatePolicy = function(principalId, effect, resource) {
     authResponse.context = {
         "stringKey": "stringval",
         "numberKey": 123,
-        "booleanKey": true
+        "booleanKey": true,
+        "tokenName": token
     };
     return authResponse;
 }

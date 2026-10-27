@@ -26,6 +26,20 @@ Resources:
             Path: /
             Method: get
 
+  WhoAmIFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src
+      Handler: handler.whoami
+      Runtime: nodejs20.x
+      Events:
+        GetWhoAmI:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /whoami
+            Method: get
+
   MyAuthFunction:
     Type: AWS::Serverless::Function
     Properties:
