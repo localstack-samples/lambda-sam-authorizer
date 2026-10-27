@@ -45,7 +45,6 @@ var generatePolicy = function(principalId, effect, resource, token) {
         "stringKey": "stringval",
         "numberKey": 123,
         "booleanKey": true,
-        "token": token,
         "tokenName": token
     };
     return authResponse;
